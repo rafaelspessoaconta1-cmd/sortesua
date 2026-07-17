@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Sorte é Sua - Sistema de Venda de Milhares</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Top Global Header -->
+    <header class="main-header" id="mainHeader" style="display: none;">
+        <div class="header-container">
+            <div class="logo">
+                <i class="fa-solid fa-clover gold-glow"></i>
+                <span class="logo-text">A Sorte <span class="accent">é Sua</span></span>
+            </div>
+            <div class="user-menu">
+                <span class="user-info" id="userInfo">Olá, <strong id="userName">...</strong> (<span id="userRole">...</span>)</span>
+                <button class="btn btn-outline btn-sm" id="logoutBtn">
+                    <i class="fa-solid fa-right-from-bracket"></i> Sair
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- 1. LOGIN SCREEN -->
+        <section id="loginScreen" class="auth-section">
+            <div class="auth-card">
+                <div class="auth-logo">
+                    <i class="fa-solid fa-clover clover-large gold-glow"></i>
+                    <h1>A Sorte <span class="accent">é Sua</span></h1>
+                    <p class="subtitle">Controle de Vendas de Cartelas de Milhar</p>
+                </div>
+                <form id="loginForm" class="form">
+                    <div id="loginError" class="alert alert-danger" style="display: none;"></div>
+                    <div class="form-group">
+                        <label for="loginUsername">Usuário</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-user"></i>
+                            <input type="text" id="loginUsername" required placeholder="Digite seu usuário">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Senha</label>
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-lock"></i>
+                            <input type="password" id="loginPassword" required placeholder="Digite sua senha">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Entrar <i class="fa-solid fa-right-to-bracket"></i>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- 2. ADMINISTRATOR PANEL -->
+        <section id="adminPanel" style="display: none;">
+            <!-- Admin Navigation -->
+            <nav class="admin-nav">
+                <button class="nav-tab active" data-target="adminDashboardTab">
+                    <i class="fa-solid fa-chart-line"></i> Dashboard
+                </button>
+                <button class="nav-tab" data-target="adminSellersTab">
+                    <i class="fa-solid fa-users"></i> Vendedores
+                </button>
+                <button class="nav-tab" data-target="adminTicketsTab">
+                    <i class="fa-solid fa-ticket"></i> Cartelas
+                </button>
+                <button class="nav-tab" data-target="adminPixTab">
+                    <i class="fa-solid fa-qrcode"></i> Pix / Pagamentos
+                </button>
+                <button class="nav-tab" data-target="adminDrawsTab">
+                    <i class="fa-solid fa-trophy"></i> Sorteios
+                </button>
+                <button class="nav-tab" data-target="adminReportsTab">
+                    <i class="fa-solid fa-file-invoice-dollar"></i> Relatórios
+                </button>
+            </nav>
+
+            <!-- Admin Tab Contents -->
+            <div class="tab-content-container">
+                <!-- A. Dashboard Tab -->
+                <div id="adminDashboardTab" class="tab-pane active">
+                    <h2 class="section-title">Dashboard Geral</h2>
+                    
+                    <div class="dashboard-grid">
+                        <div class="dash-card">
+                            <div class="dash-card-icon red-bg"><i class="fa-solid fa-ticket"></i></div>
+                            <div class="dash-card-info">
+                                <h3>Total de Cartelas</h3>
+                                <p id="dashTotalCartelas">0</p>
+                            </div>
+                        </div>
+                        <div class="dash-card">
+                            <div class="dash-card-icon green-bg"><i class="fa-solid fa-circle-check"></i></div>
+                            <div class="dash-card-info">
+                                <h3>Cartelas Vendidas</h3>
+                                <p id="dashCartelasVendidas">0</p>
+                            </div>
+                        </div>
+                        <div class="dash-card">
+                            <div class="dash-card-icon blue-bg"><i class="fa-solid fa-tags"></i></div>
+                            <div class="dash-card-info">
+                                <h3>Cartelas Disponíveis</h3>
+                                <p id="dashCartelasDisponiveis">0</p>
+                            </div>
+                        </div>
+                        <div class="dash-card">
+                            <div class="dash-card-icon gold-bg"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                            <div class="dash-card-info">
+                                <h3>Total Vendido (Pago)</h3>
+                                <p id="dashFaturamento">R$ 0,00</p>
+                            </div>
+                        </div>
+                        <div class="dash-card">
+                            <div class="dash-card-icon orange-bg"><i class="fa-solid fa-clock"></i></div>
+                            <div class="dash-card-info">
+                                <h3>Pix Pendente</h3>
+                                <p id="dashPixPendente">R$ 0,00 (<span id="dashPixPendenteCount">0</span>)</p>
+                            </div>
+                        </div>
+                        <div class="dash-card">
+                            <div class="dash-card-icon gold-glow-bg"><i class="fa-solid fa-trophy"></i></div>
+                            <div class="dash-card-info">
+                                <h3>Cartelas Premiadas</h3>
+                                <p id="dashCartelasPremiadas">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- B. Vendedores Tab -->
+                <div id="adminSellersTab" class="tab-pane">
+                    <div class="split-layout">
+                        <!-- Cadastro de Vendedor -->
+                        <div class="card form-card">
+                            <h2 class="card-title"><i class="fa-solid fa-user-plus"></i> Novo Vendedor</h2>
+                            <form id="newSellerForm" class="form">
+                                <div id="sellerError" class="alert alert-danger" style="display: none;"></div>
+                                <div id="sellerSuccess" class="alert alert-success" style="display: none;"></div>
+                                <div class="form-group">
+                                    <label for="sellerName">Nome Completo</label>
+                                    <input type="text" id="sellerName" required placeholder="Nome do vendedor">
+                                </div>
+                                <div class="form-group">
+                                    <label for="sellerPhone">Telefone / WhatsApp</label>
+                                    <input type="text" id="sellerPhone" required placeholder="Ex: (11) 99999-9999">
+                                </div>
+                                <div class="form-group">
+                                    <label for="sellerUsername">Usuário de Login</label>
+                                    <input type="text" id="sellerUsername" required placeholder="Nome de usuário para login">
+                                </div>
+                                <div class="form-group">
+                                    <label for="sellerPassword">Senha</label>
+                                    <input type="password" id="sellerPassword" required placeholder="Crie uma senha temporária">
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block">Salvar Vendedor</button>
+                            </form>
+                        </div>
+
+                        <!-- Lista de Vendedores -->
+                        <div class="card list-card">
+                            <h2 class="card-title"><i class="fa-solid fa-users"></i> Vendedores Cadastrados</h2>
+                            <div class="table-responsive">
+                                <table class="table" id="vendedoresTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Usuário</th>
+                                            <th>Telefone</th>
+                                            <th>Status</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="vendedoresList">
+                                        <!-- Carregado via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- C. Cartelas Tab -->
+                <div id="adminTicketsTab" class="tab-pane">
+                    <!-- Geração de Cartelas -->
+                    <div class="accordion-card card mb-4">
+                        <h2 class="card-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Geração de Cartelas em Lote</h2>
+                        <form id="bulkGenerateForm" class="form inline-form">
+                            <div class="form-row">
+                                <div class="form-group flex-1">
+                                    <label for="bulkDate">Data do Sorteio</label>
+                                    <input type="date" id="bulkDate" required>
+                                </div>
+                                <div class="form-group flex-1">
+                                    <label for="bulkQty">Quantidade de Cartelas</label>
+                                    <input type="number" id="bulkQty" required min="1" max="1000" placeholder="Ex: 50" value="50">
+                                </div>
+                                <div class="form-group flex-1">
+                                    <label for="bulkPrefix">Prefixo do Número (opcional)</label>
+                                    <input type="text" id="bulkPrefix" placeholder="Ex: A" maxlength="4">
+                                </div>
+                                <div class="form-group flex-1">
+                                    <label for="bulkSeller">Direcionar para Vendedor</label>
+                                    <select id="bulkSeller" required>
+                                        <option value="">Selecione...</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-2">Gerar Cartelas Automaticamente</button>
+                        </form>
+                    </div>
+
+                    <!-- Cadastro Unitário -->
+                    <div class="accordion-card card mb-4">
+                        <h2 class="card-title"><i class="fa-solid fa-plus"></i> Cadastrar Cartela Individual</h2>
+                        <form id="singleTicketForm" class="form">
+                            <div class="form-row">
+                                <div class="form-group flex-1">
+                                    <label for="singleNumber">Número da Cartela</label>
+                                    <input type="text" id="singleNumber" required placeholder="Ex: 001">
+                                </div>
+                                <div class="form-group flex-1">
+                                    <label for="singleDate">Data do Sorteio</label>
+                                    <input type="date" id="singleDate" required>
+                                </div>
+                                <div class="form-group flex-1">
+                                    <label for="singleValue">Valor (R$)</label>
+                                    <input type="number" id="singleValue" required value="2.00" step="0.50">
+                                </div>
+                                <div class="form-group flex-1">
+                                    <label for="singleSeller">Direcionar para Vendedor</label>
+                                    <select id="singleSeller" required>
+                                        <option value="">Selecione...</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row mt-2">
+                                <div class="form-group flex-1">
+                                    <label for="milhar1">Milhar 1</label>
+                                    <input type="text" id="milhar1" required placeholder="Ex: 1234" maxlength="4" minlength="4">
+                                </div>
+                                <div class="form-group flex-1">
+                                    <label for="milhar2">Milhar 2</label>
+                                    <input type="text" id="milhar2" required placeholder="Ex: 5678" maxlength="4" minlength="4">
+                                </div>
+                                <div class="form-group flex-1">
+                                    <label for="milhar3">Milhar 3</label>
+                                    <input type="text" id="milhar3" required placeholder="Ex: 9012" maxlength="4" minlength="4">
+                                </div>
+                                <div class="form-group flex-1">
+                                    <label for="milhar4">Milhar 4</label>
+                                    <input type="text" id="milhar4" required placeholder="Ex: 3456" maxlength="4" minlength="4">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-secondary mt-2">Cadastrar Cartela</button>
+                        </form>
+                    </div>
+
+                    <!-- Filtros e Listagem de Cartelas -->
+                    <div class="card">
+                        <div class="list-header">
+                            <h2 class="card-title"><i class="fa-solid fa-list-ol"></i> Listagem de Cartelas</h2>
+                            <div class="filters-row">
+                                <input type="text" id="ticketSearch" placeholder="Buscar número ou milhar..." class="form-control">
+                                <select id="ticketStatusFilter" class="form-control">
+                                    <option value="">Todos os Status</option>
+                                    <option value="disponivel">Disponíveis</option>
+                                    <option value="vendida">Vendidas</option>
+                                    <option value="premiada">Premiadas</option>
+                                    <option value="cancelada">Canceladas</option>
+                                </select>
+                                <input type="date" id="ticketDateFilter" class="form-control">
+                                <button class="btn btn-outline" id="filterTicketsBtn"><i class="fa-solid fa-filter"></i> Filtrar</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive mt-3">
+                            <table class="table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Número</th>
+                                        <th>Data do Sorteio</th>
+                                        <th>Vendedor</th>
+                                        <th>Milhares</th>
+                                        <th>Valor</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ticketsListAdmin">
+                                    <!-- Carregado via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- D. Pix / Pagamentos Tab -->
+                <div id="adminPixTab" class="tab-pane">
+                    <div class="split-layout">
+                        <!-- Configuração do Pix -->
+                        <div class="card form-card">
+                            <h2 class="card-title"><i class="fa-solid fa-gear"></i> Dados do Pix para Recebimento</h2>
+                            <form id="pixSettingsForm" class="form">
+                                <div id="pixSuccess" class="alert alert-success" style="display: none;"></div>
+                                <div class="form-group">
+                                    <label for="pixKey">Chave Pix (ex: Celular, E-mail, CNPJ)</label>
+                                    <input type="text" id="pixKey" required placeholder="Insira a chave Pix">
+                                </div>
+                                <div class="form-group">
+                                    <label for="pixQrCode">QR Code (Imagem)</label>
+                                    <input type="file" id="pixQrCode" accept="image/*">
+                                    <small class="form-text text-muted">Selecione uma imagem do QR Code para atualizar.</small>
+                                </div>
+                                <div class="qr-preview-box">
+                                    <p class="text-center font-bold">QR Code Atual:</p>
+                                    <img id="adminPixQrPreview" src="/uploads/pix_qrcode.png" alt="QR Code Pix" class="img-preview">
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block mt-3">Salvar Configurações de Pix</button>
+                            </form>
+                        </div>
+
+                        <!-- Pagamentos Pix Pendentes -->
+                        <div class="card list-card">
+                            <h2 class="card-title"><i class="fa-solid fa-circle-dollar-to-slot"></i> Confirmação de Pagamentos Pix</h2>
+                            <p class="subtitle mb-3">Vendas aguardando verificação do depósito Pix.</p>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Cartela</th>
+                                            <th>Cliente</th>
+                                            <th>Vendedor</th>
+                                            <th>Valor</th>
+                                            <th>Data Venda</th>
+                                            <th>Ação</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="pixPendentesList">
+                                        <!-- Carregado via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- E. Sorteios Tab -->
+                <div id="adminDrawsTab" class="tab-pane">
+                    <div class="split-layout">
+                        <!-- Lançar Resultado -->
+                        <div class="card form-card">
+                            <h2 class="card-title"><i class="fa-solid fa-bullhorn"></i> Lançar Milhar Sorteada</h2>
+                            <p class="subtitle mb-3">Ao salvar, o sistema conferirá todas as cartelas vendidas da data e marcará as ganhadoras automaticamente.</p>
+                            <form id="drawResultForm" class="form">
+                                <div id="drawError" class="alert alert-danger" style="display: none;"></div>
+                                <div id="drawSuccess" class="alert alert-success" style="display: none;"></div>
+                                <div class="form-group">
+                                    <label for="drawDate">Data do Sorteio</label>
+                                    <input type="date" id="drawDate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="drawMilhar">Milhar Sorteada (4 dígitos)</label>
+                                    <input type="text" id="drawMilhar" required placeholder="Ex: 5742" maxlength="4" minlength="4" class="milhar-input-large">
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block mt-3">Registrar Sorteio e Conferir</button>
+                            </form>
+                        </div>
+
+                        <!-- Histórico de Sorteios -->
+                        <div class="card list-card">
+                            <h2 class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Sorteios Anteriores</h2>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Data do Sorteio</th>
+                                            <th>Milhar Sorteada</th>
+                                            <th>Cadastrado em</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="drawHistoryList">
+                                        <!-- Carregado via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- F. Relatórios Tab -->
+                <div id="adminReportsTab" class="tab-pane">
+                    <h2 class="section-title">Relatórios de Vendas</h2>
+
+                    <div class="reports-grid">
+                        <!-- Vendas por Dia -->
+                        <div class="card">
+                            <h3 class="card-title"><i class="fa-solid fa-calendar-days"></i> Faturamento Diário</h3>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Data</th>
+                                            <th>Cartelas Vendidas</th>
+                                            <th>Faturamento Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="reportDailyList">
+                                        <!-- Carregado via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Vendas por Vendedor -->
+                        <div class="card">
+                            <h3 class="card-title"><i class="fa-solid fa-chart-bar"></i> Vendas por Vendedor</h3>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Vendedor</th>
+                                            <th>Cartelas Vendidas</th>
+                                            <th>Faturamento Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="reportSellerList">
+                                        <!-- Carregado via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. SELLER PANEL -->
+        <section id="sellerPanel" style="display: none;">
+            <div class="seller-layout">
+                <!-- Seller View Area -->
+                <div class="seller-main-card card">
+                    <div class="seller-header">
+                        <h2><i class="fa-solid fa-store text-danger"></i> Cartelas Disponíveis</h2>
+                        <div class="seller-search">
+                            <input type="text" id="sellerSearchInput" placeholder="Buscar número ou milhar..." class="form-control">
+                            <button class="btn btn-primary" id="sellerSearchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Cartelas Grid -->
+                    <div class="tickets-grid" id="sellerTicketsGrid">
+                        <!-- Carregado via JS -->
+                    </div>
+                </div>
+
+                <!-- Vendas do Dia do Vendedor -->
+                <div class="seller-sales-card card mt-4">
+                    <h2 class="card-title"><i class="fa-solid fa-cart-shopping"></i> Minhas Vendas de Hoje</h2>
+                    <p class="subtitle mb-3">Lista de vendas realizadas por você no dia atual.</p>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Cartela</th>
+                                    <th>Cliente</th>
+                                    <th>Forma Pagto.</th>
+                                    <th>Status</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sellerSalesList">
+                                <!-- Carregado via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 4. MODAL DE VENDA -->
+    <div class="modal-backdrop" id="saleModal" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Registrar Venda - Cartela #<span id="modalTicketNumber">000</span></h3>
+                <button class="modal-close" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="sellTicketForm" class="form">
+                    <input type="hidden" id="modalTicketId">
+                    <div class="form-group">
+                        <label for="clientName">Nome do Cliente</label>
+                        <input type="text" id="clientName" required placeholder="Nome completo do comprador">
+                    </div>
+                    <div class="form-group">
+                        <label for="clientPhone">Telefone / WhatsApp</label>
+                        <input type="text" id="clientPhone" required placeholder="Ex: (11) 99999-9999">
+                    </div>
+                    <div class="form-group">
+                        <label>Forma de Pagamento</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="paymentMethod" value="dinheiro" checked>
+                                <span class="radio-custom"><i class="fa-solid fa-money-bill-1-wave"></i> Dinheiro (Pago)</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="paymentMethod" value="pix">
+                                <span class="radio-custom"><i class="fa-solid fa-qrcode"></i> Pix (Pendente)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Area de pagamento Pix (oculta inicialmente) -->
+                    <div class="pix-payment-area" id="pixPaymentArea" style="display: none;">
+                        <div class="alert alert-warning">
+                            <i class="fa-solid fa-info-circle"></i> O Pix ficará marcado como "Pendente" até que o administrador confirme o recebimento.
+                        </div>
+                        <div class="pix-qr-container">
+                            <img id="modalPixQr" src="/uploads/pix_qrcode.png" alt="QR Code Pix" class="pix-qr-img">
+                            <div class="pix-key-box">
+                                <span class="pix-key-label">Chave Pix:</span>
+                                <strong id="modalPixKey">financeiro@asorteesua.com</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-actions mt-4">
+                        <button type="button" class="btn btn-outline" id="cancelSaleBtn">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" id="confirmSaleBtn">Confirmar Venda</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast" style="display: none;"></div>
+
+    <footer class="footer">
+        <p>&copy; 2026 A Sorte é Sua. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
