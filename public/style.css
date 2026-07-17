@@ -286,12 +286,15 @@ h1, h2, h3, h4, h5, h6 {
 
 .input-wrapper i {
     position: absolute;
-    left: 14px;
+    left: 16px;
     color: var(--text-muted);
+    font-size: 1.1rem;
+    pointer-events: none;
 }
 
-.input-wrapper input {
-    padding-left: 40px;
+.input-wrapper input[type="text"],
+.input-wrapper input[type="password"] {
+    padding-left: 48px !important;
 }
 
 .form input[type="text"],

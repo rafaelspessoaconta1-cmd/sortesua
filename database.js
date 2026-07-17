@@ -22,8 +22,8 @@ function generateSecurePassword() {
 async function initDb() {
   const { data: adminExists } = await supabase.from('usuarios').select('id').eq('username', 'admin').maybeSingle()
   if (!adminExists) {
-    const adminPass = hashPassword('Admin@Sorte2026!Seg')
-    console.log('=== SENHA ADMIN padrão: Admin@Sorte2026!Seg ===')
+    const adminPass = hashPassword('Rafael@4180')
+    console.log('=== SENHA ADMIN padrão: Rafael@4180 ===')
     await supabase.from('usuarios').insert({
       username: 'admin',
       password: adminPass,
