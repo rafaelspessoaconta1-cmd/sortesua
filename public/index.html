@@ -11,6 +11,7 @@
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23D32F2F'/%3E%3Cpath d='M32 12c-1.5 4-6 7-6 7s-4.5-3-6-7c-2-4.5 2-8 6-6 2 1 4 4 6 6 2-2 4-5 6-6 4-2 8 1.5 6 6-1.5 4-6 7-6 7s-4.5-3-6-7z' fill='%23D4AF37' transform='translate(0,8)'/%3E%3Cpath d='M18 28c4 1.5 7 6 7 6s-3 4.5-7 6c-4.5 2-8-2-6-6 1-2 4-4 6-6z' fill='%23D4AF37' transform='translate(8,0)'/%3E%3Cpath d='M46 28c-4 1.5-7 6-7 6s3 4.5 7 6c4.5 2 8-2 6-6-1-2-4-4-6-6z' fill='%23D4AF37' transform='translate(-8,0)'/%3E%3Cpath d='M32 44c-1.5-4-6-7-6-7s-4.5 3-6 7c-2 4.5 2 8 6 6 2-1 4-4 6-6 2 2 4 5 6 6 4 2 8-1.5 6-6-1.5-4-6-7-6-7s-4.5 3-6 7z' fill='%23D4AF37' transform='translate(0,-8)'/%3E%3C/svg%3E">
 </head>
 <body>
     <!-- Top Global Header -->
@@ -72,7 +73,7 @@
                     <i class="fa-solid fa-users"></i> Vendedores
                 </button>
                 <button class="nav-tab" data-target="adminTicketsTab">
-                    <i class="fa-solid fa-ticket"></i> Cartelas
+                    <i class="fa-solid fa-cash-register"></i> Vender
                 </button>
                 <button class="nav-tab" data-target="adminPixTab">
                     <i class="fa-solid fa-qrcode"></i> Pix / Pagamentos
@@ -80,8 +81,20 @@
                 <button class="nav-tab" data-target="adminDrawsTab">
                     <i class="fa-solid fa-trophy"></i> Sorteios
                 </button>
+                <button class="nav-tab" data-target="adminVendasTab">
+                    <i class="fa-solid fa-cart-shopping"></i> Vendas
+                </button>
+                <button class="nav-tab" data-target="adminBloqueiosTab">
+                    <i class="fa-solid fa-ban"></i> Bloqueios
+                </button>
                 <button class="nav-tab" data-target="adminReportsTab">
                     <i class="fa-solid fa-file-invoice-dollar"></i> Relatórios
+                </button>
+                <button class="nav-tab" data-target="adminRankingTab">
+                    <i class="fa-solid fa-trophy"></i> Ranking
+                </button>
+                <button class="nav-tab" data-target="adminValorTab">
+                    <i class="fa-solid fa-trophy"></i> Prêmio
                 </button>
             </nav>
 
@@ -93,38 +106,31 @@
                     
                     <div class="dashboard-grid">
                         <div class="dash-card">
-                            <div class="dash-card-icon red-bg"><i class="fa-solid fa-ticket"></i></div>
+                            <div class="dash-card-icon red-bg"><i class="fa-solid fa-sack-dollar"></i></div>
                             <div class="dash-card-info">
-                                <h3>Total de Cartelas</h3>
-                                <p id="dashTotalCartelas">0</p>
+                                <h3>Valor Vendido Hoje</h3>
+                                <p id="dashValorVendidoHoje">R$ 0,00</p>
                             </div>
                         </div>
                         <div class="dash-card">
                             <div class="dash-card-icon green-bg"><i class="fa-solid fa-circle-check"></i></div>
                             <div class="dash-card-info">
+                                <h3>Valor Recebido Hoje</h3>
+                                <p id="dashValorRecebidoHoje">R$ 0,00</p>
+                            </div>
+                        </div>
+                        <div class="dash-card">
+                            <div class="dash-card-icon orange-bg"><i class="fa-solid fa-hourglass-half"></i></div>
+                            <div class="dash-card-info">
+                                <h3>Valor Pendente</h3>
+                                <p id="dashValorPendente">R$ 0,00</p>
+                            </div>
+                        </div>
+                        <div class="dash-card">
+                            <div class="dash-card-icon blue-bg"><i class="fa-solid fa-ticket"></i></div>
+                            <div class="dash-card-info">
                                 <h3>Cartelas Vendidas</h3>
                                 <p id="dashCartelasVendidas">0</p>
-                            </div>
-                        </div>
-                        <div class="dash-card">
-                            <div class="dash-card-icon blue-bg"><i class="fa-solid fa-tags"></i></div>
-                            <div class="dash-card-info">
-                                <h3>Cartelas Disponíveis</h3>
-                                <p id="dashCartelasDisponiveis">0</p>
-                            </div>
-                        </div>
-                        <div class="dash-card">
-                            <div class="dash-card-icon gold-bg"><i class="fa-solid fa-hand-holding-dollar"></i></div>
-                            <div class="dash-card-info">
-                                <h3>Total Vendido (Pago)</h3>
-                                <p id="dashFaturamento">R$ 0,00</p>
-                            </div>
-                        </div>
-                        <div class="dash-card">
-                            <div class="dash-card-icon orange-bg"><i class="fa-solid fa-clock"></i></div>
-                            <div class="dash-card-info">
-                                <h3>Pix Pendente</h3>
-                                <p id="dashPixPendente">R$ 0,00 (<span id="dashPixPendenteCount">0</span>)</p>
                             </div>
                         </div>
                         <div class="dash-card">
@@ -132,6 +138,34 @@
                             <div class="dash-card-info">
                                 <h3>Cartelas Premiadas</h3>
                                 <p id="dashCartelasPremiadas">0</p>
+                            </div>
+                        </div>
+                        <div class="dash-card">
+                            <div class="dash-card-icon gold-bg"><i class="fa-solid fa-users"></i></div>
+                            <div class="dash-card-info">
+                                <h3>Vendedores Ativos</h3>
+                                <p id="dashVendedoresAtivos">0</p>
+                            </div>
+                        </div>
+                        <div class="dash-card">
+                            <div class="dash-card-icon primary-bg"><i class="fa-solid fa-chart-line"></i></div>
+                            <div class="dash-card-info">
+                                <h3>Ticket Médio</h3>
+                                <p id="dashTicketMedio">R$ 0,00</p>
+                            </div>
+                        </div>
+                        <div class="dash-card">
+                            <div class="dash-card-icon red-bg"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                            <div class="dash-card-info">
+                                <h3>Lucro do Dia</h3>
+                                <p id="dashLucroDoDia">R$ 0,00</p>
+                            </div>
+                        </div>
+                        <div class="dash-card premio-dash-card">
+                            <div class="dash-card-icon green-bg"><i class="fa-solid fa-trophy"></i></div>
+                            <div class="dash-card-info">
+                                <h3>Prêmio Atual</h3>
+                                <p id="dashPremioAtual">R$ 500,00</p>
                             </div>
                         </div>
                     </div>
@@ -161,6 +195,7 @@
                                 <div class="form-group">
                                     <label for="sellerPassword">Senha</label>
                                     <input type="password" id="sellerPassword" required placeholder="Crie uma senha temporária">
+                                    <small class="form-text text-muted">Mínimo 8 caracteres, com maiúscula, minúscula, número e caractere especial (!@#$%&*)</small>
                                 </div>
                                 <button type="submit" class="btn btn-primary btn-block">Salvar Vendedor</button>
                             </form>
@@ -189,117 +224,80 @@
                     </div>
                 </div>
 
-                <!-- C. Cartelas Tab -->
+                <!-- C. Vender Tab -->
                 <div id="adminTicketsTab" class="tab-pane">
-                    <!-- Geração de Cartelas -->
                     <div class="accordion-card card mb-4">
-                        <h2 class="card-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Geração de Cartelas em Lote</h2>
-                        <form id="bulkGenerateForm" class="form inline-form">
+                        <div class="seller-header">
+                            <h2><i class="fa-solid fa-cash-register text-danger"></i> Registrar Venda</h2>
+                        </div>
+
+                        <form id="adminMilharSaleForm" class="form">
                             <div class="form-row">
                                 <div class="form-group flex-1">
-                                    <label for="bulkDate">Data do Sorteio</label>
-                                    <input type="date" id="bulkDate" required>
+                                    <label for="admVendaDataSorteio">Data do Sorteio</label>
+                                    <input type="date" id="admVendaDataSorteio" required>
+                                </div>
+
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group flex-2">
+                                    <label for="admVendaClienteNome">Nome do Cliente</label>
+                                    <input type="text" id="admVendaClienteNome" required placeholder="Nome completo">
                                 </div>
                                 <div class="form-group flex-1">
-                                    <label for="bulkQty">Quantidade de Cartelas</label>
-                                    <input type="number" id="bulkQty" required min="1" max="1000" placeholder="Ex: 50" value="50">
-                                </div>
-                                <div class="form-group flex-1">
-                                    <label for="bulkPrefix">Prefixo do Número (opcional)</label>
-                                    <input type="text" id="bulkPrefix" placeholder="Ex: A" maxlength="4">
-                                </div>
-                                <div class="form-group flex-1">
-                                    <label for="bulkSeller">Direcionar para Vendedor</label>
-                                    <select id="bulkSeller" required>
-                                        <option value="">Selecione...</option>
-                                    </select>
+                                    <label for="admVendaClienteTelefone">Telefone / WhatsApp</label>
+                                    <input type="text" id="admVendaClienteTelefone" required placeholder="(11) 99999-9999">
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary mt-2">Gerar Cartelas Automaticamente</button>
+
+                            <div class="form-group">
+                                <label>Forma de Pagamento</label>
+                                <div class="radio-group">
+                                    <label class="radio-label">
+                                        <input type="radio" name="admVendaPaymentMethod" value="dinheiro" checked>
+                                        <span class="radio-custom"><i class="fa-solid fa-money-bill-1-wave"></i> Dinheiro (Pago)</span>
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="admVendaPaymentMethod" value="pix">
+                                        <span class="radio-custom"><i class="fa-solid fa-qrcode"></i> Pix (Pendente)</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <hr class="divider">
+
+                            <div class="form-group">
+                                <label><strong>Digite os Milhares (4 dígitos cada)</strong></label>
+                                <p class="subtitle" style="margin: 4px 0 12px 0;">Digite exatamente 4 milhares para formar 1 cartela.</p>
+                                <div id="admMilharesInputsContainer" class="milhares-grid">
+                                </div>
+                                <div class="milhar-summary" id="admMilharSummary">
+                                    <span>0 milhares = 0 cartelas</span>
+                                </div>
+                                <button type="button" class="btn btn-secondary mt-2" id="admRandomMilharesBtn">
+                                    <i class="fa-solid fa-dice"></i> Gerar Aleatório
+                                </button>
+                            </div>
+
+                            <div id="admVendaPixArea" style="display: none;">
+                                <div class="alert alert-warning">
+                                    <i class="fa-solid fa-info-circle"></i> O Pix ficará marcado como "Pendente" até confirmação.
+                                </div>
+                                <div class="pix-qr-container">
+                                    <img id="admModalPixQr" src="/uploads/pix_qrcode.png" alt="QR Code Pix" class="pix-qr-img">
+                                    <div class="pix-key-box">
+                                        <span class="pix-key-label">Chave Pix:</span>
+                                        <strong id="admModalPixKey">financeiro@asorteesua.com</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-block mt-4">
+                                <i class="fa-solid fa-check-circle"></i> Realizar Venda
+                            </button>
                         </form>
                     </div>
 
-                    <!-- Cadastro Unitário -->
-                    <div class="accordion-card card mb-4">
-                        <h2 class="card-title"><i class="fa-solid fa-plus"></i> Cadastrar Cartela Individual</h2>
-                        <form id="singleTicketForm" class="form">
-                            <div class="form-row">
-                                <div class="form-group flex-1">
-                                    <label for="singleNumber">Número da Cartela</label>
-                                    <input type="text" id="singleNumber" required placeholder="Ex: 001">
-                                </div>
-                                <div class="form-group flex-1">
-                                    <label for="singleDate">Data do Sorteio</label>
-                                    <input type="date" id="singleDate" required>
-                                </div>
-                                <div class="form-group flex-1">
-                                    <label for="singleValue">Valor (R$)</label>
-                                    <input type="number" id="singleValue" required value="2.00" step="0.50">
-                                </div>
-                                <div class="form-group flex-1">
-                                    <label for="singleSeller">Direcionar para Vendedor</label>
-                                    <select id="singleSeller" required>
-                                        <option value="">Selecione...</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-row mt-2">
-                                <div class="form-group flex-1">
-                                    <label for="milhar1">Milhar 1</label>
-                                    <input type="text" id="milhar1" required placeholder="Ex: 1234" maxlength="4" minlength="4">
-                                </div>
-                                <div class="form-group flex-1">
-                                    <label for="milhar2">Milhar 2</label>
-                                    <input type="text" id="milhar2" required placeholder="Ex: 5678" maxlength="4" minlength="4">
-                                </div>
-                                <div class="form-group flex-1">
-                                    <label for="milhar3">Milhar 3</label>
-                                    <input type="text" id="milhar3" required placeholder="Ex: 9012" maxlength="4" minlength="4">
-                                </div>
-                                <div class="form-group flex-1">
-                                    <label for="milhar4">Milhar 4</label>
-                                    <input type="text" id="milhar4" required placeholder="Ex: 3456" maxlength="4" minlength="4">
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-secondary mt-2">Cadastrar Cartela</button>
-                        </form>
-                    </div>
-
-                    <!-- Filtros e Listagem de Cartelas -->
-                    <div class="card">
-                        <div class="list-header">
-                            <h2 class="card-title"><i class="fa-solid fa-list-ol"></i> Listagem de Cartelas</h2>
-                            <div class="filters-row">
-                                <input type="text" id="ticketSearch" placeholder="Buscar número ou milhar..." class="form-control">
-                                <select id="ticketStatusFilter" class="form-control">
-                                    <option value="">Todos os Status</option>
-                                    <option value="disponivel">Disponíveis</option>
-                                    <option value="vendida">Vendidas</option>
-                                    <option value="premiada">Premiadas</option>
-                                    <option value="cancelada">Canceladas</option>
-                                </select>
-                                <input type="date" id="ticketDateFilter" class="form-control">
-                                <button class="btn btn-outline" id="filterTicketsBtn"><i class="fa-solid fa-filter"></i> Filtrar</button>
-                            </div>
-                        </div>
-                        <div class="table-responsive mt-3">
-                            <table class="table align-middle">
-                                <thead>
-                                    <tr>
-                                        <th>Número</th>
-                                        <th>Data do Sorteio</th>
-                                        <th>Vendedor</th>
-                                        <th>Milhares</th>
-                                        <th>Valor</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="ticketsListAdmin">
-                                    <!-- Carregado via JS -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- D. Pix / Pagamentos Tab -->
@@ -395,7 +393,45 @@
                     </div>
                 </div>
 
-                <!-- F. Relatórios Tab -->
+                <!-- F. Vendas Tab -->
+                <div id="adminVendasTab" class="tab-pane">
+                    <h2 class="section-title"><i class="fa-solid fa-cart-shopping"></i> Vendas Realizadas</h2>
+
+                    <div class="card">
+                        <div class="list-header">
+                            <div class="filters-row">
+                                <input type="text" id="vendasSearch" placeholder="Buscar cartela, cliente ou vendedor..." class="form-control" style="min-width:200px;">
+                                <select id="vendasVendedorFilter" class="form-control">
+                                    <option value="">Todos os vendedores</option>
+                                </select>
+                                <input type="date" id="vendasDataInicio" class="form-control" placeholder="Data início">
+                                <input type="date" id="vendasDataFim" class="form-control" placeholder="Data fim">
+                                <button class="btn btn-outline" id="vendasFilterBtn"><i class="fa-solid fa-filter"></i> Filtrar</button>
+                                <button class="btn btn-secondary" id="exportAdminVendasBtn"><i class="fa-solid fa-file-excel"></i> XLS</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive mt-3">
+                            <table class="table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Cartela</th>
+                                        <th>Milhares</th>
+                                        <th>Cliente</th>
+                                        <th>Vendedor</th>
+                                        <th>Valor</th>
+                                        <th>Pagamento</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="vendasListAdmin">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- G. Relatórios Tab -->
                 <div id="adminReportsTab" class="tab-pane">
                     <h2 class="section-title">Relatórios de Vendas</h2>
 
@@ -439,104 +475,400 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- H. Bloqueios Tab -->
+                <div id="adminBloqueiosTab" class="tab-pane">
+                    <h2 class="section-title"><i class="fa-solid fa-ban"></i> Bloqueio de Milhares</h2>
+
+                    <div class="split-layout">
+                        <div class="card form-card">
+                            <h3 class="card-title">Bloquear Milhar</h3>
+                            <form id="blockMilharForm">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Milhar (4 dígitos)</label>
+                                        <input type="text" id="blockMilharInput" class="form-control" placeholder="Ex: 1234" maxlength="4" pattern="\d{4}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Data do Sorteio</label>
+                                        <input type="date" id="blockMilharData" class="form-control">
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-lock"></i> Bloquear</button>
+                            </form>
+                        </div>
+                        <div class="card">
+                            <h3 class="card-title">Milhares Bloqueados</h3>
+                            <div class="filters-row" style="margin-bottom:12px;">
+                                <input type="date" id="blockFilterData" class="form-control" style="max-width:200px;">
+                                <button class="btn btn-outline" id="blockFilterBtn"><i class="fa-solid fa-filter"></i> Filtrar</button>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Milhar</th>
+                                            <th>Data Sorteio</th>
+                                            <th>Bloqueado em</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="blockedMilharesList">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- I. Ranking Tab -->
+                <div id="adminRankingTab" class="tab-pane">
+                    <h2 class="section-title"><i class="fa-solid fa-trophy"></i> Ranking de Vendedores</h2>
+
+                    <div class="ranking-container">
+                        <div class="ranking-header">
+                            <div class="filters-row">
+                                <input type="month" id="rankingMonth" class="form-control" style="max-width:220px;">
+                                <button class="btn btn-primary" id="rankingFilterBtn"><i class="fa-solid fa-search"></i> Ver Ranking</button>
+                            </div>
+                            <p class="text-muted" style="margin:8px 0 0;">Ranking mensal — todo mês os valores zeram automaticamente.</p>
+                        </div>
+
+                        <div class="ranking-podium" id="rankingPodium"></div>
+
+                        <div class="card mt-4">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Vendedor</th>
+                                            <th>Cartelas Vendidas</th>
+                                            <th>Valor Vendido</th>
+                                            <th>Comissão</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="rankingList">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- J. Valor Sorteio Tab -->
+                <div id="adminValorTab" class="tab-pane">
+                    <h2 class="section-title"><i class="fa-solid fa-trophy"></i> Prêmio do Sorteio</h2>
+                    <p class="text-muted" style="margin-bottom:16px;">Valor que o ganhador receberá no sorteio. A cartela permanece R$ 2,00.</p>
+
+                    <div style="display:flex;gap:20px;flex-wrap:wrap;">
+                        <div class="card" style="max-width:400px;flex:1;">
+                            <div class="form">
+                                <div class="form-group">
+                                    <label for="valorSorteioInput">Valor do Prêmio (R$)</label>
+                                    <input type="number" id="valorSorteioInput" class="form-control" step="1" min="1" required>
+                                </div>
+                                <div class="form-group" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+                                    <button class="btn btn-primary" id="saveValorBtn"><i class="fa-solid fa-floppy-disk"></i> Salvar</button>
+                                    <button class="btn btn-warning" id="acumularValorBtn"><i class="fa-solid fa-arrow-up"></i> Acumular +R$500</button>
+                                    <span id="valorSavedMsg" style="color:#16a34a;display:none;"><i class="fa-solid fa-check"></i> Salvo!</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card premio-display-card" style="flex:0 0 280px;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:30px;">
+                            <div style="font-size:14px;color:#666;margin-bottom:8px;">PRÊMIO ATUAL</div>
+                            <div id="premioDisplayValue" style="font-size:36px;font-weight:800;color:#16a34a;">R$ 500,00</div>
+                            <div style="font-size:12px;color:#999;margin-top:8px;">válido para o próximo sorteio</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
         <!-- 3. SELLER PANEL -->
         <section id="sellerPanel" style="display: none;">
-            <div class="seller-layout">
-                <!-- Seller View Area -->
-                <div class="seller-main-card card">
-                    <div class="seller-header">
-                        <h2><i class="fa-solid fa-store text-danger"></i> Cartelas Disponíveis</h2>
-                        <div class="seller-search">
-                            <input type="text" id="sellerSearchInput" placeholder="Buscar número ou milhar..." class="form-control">
-                            <button class="btn btn-primary" id="sellerSearchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
-                        </div>
-                    </div>
+            <nav class="seller-nav">
+                <button class="seller-tab active" data-sellertarget="sellerVenderTab">
+                    <i class="fa-solid fa-cash-register"></i> Vender
+                </button>
+                <button class="seller-tab" data-sellertarget="sellerVendasTab">
+                    <i class="fa-solid fa-cart-shopping"></i> Vendas
+                </button>
+                <button class="seller-tab" data-sellertarget="sellerDashboardTab">
+                    <i class="fa-solid fa-chart-simple"></i> Meu Dashboard
+                </button>
+            </nav>
 
-                    <!-- Cartelas Grid -->
-                    <div class="tickets-grid" id="sellerTicketsGrid">
-                        <!-- Carregado via JS -->
+            <div class="seller-tab-content">
+                <!-- Aba Vender -->
+                <div id="sellerVenderTab" class="seller-tab-pane active">
+                    <div class="seller-layout">
+                        <div class="seller-main-card card">
+                            <div class="seller-header">
+                                <h2><i class="fa-solid fa-pen-to-square text-danger"></i> Nova Venda</h2>
+                            </div>
+
+                            <form id="milharSaleForm" class="form">
+                                <div class="form-row">
+                                    <div class="form-group flex-1">
+                                        <label for="vendaDataSorteio">Data do Sorteio</label>
+                                        <input type="date" id="vendaDataSorteio" required>
+                                    </div>
+                                    <div class="form-group flex-2">
+                                        <label for="vendaClienteNome">Nome do Cliente</label>
+                                        <input type="text" id="vendaClienteNome" required placeholder="Nome completo">
+                                    </div>
+                                    <div class="form-group flex-1">
+                                        <label for="vendaClienteTelefone">Telefone / WhatsApp</label>
+                                        <input type="text" id="vendaClienteTelefone" required placeholder="(11) 99999-9999">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Forma de Pagamento</label>
+                                    <div class="radio-group">
+                                        <label class="radio-label">
+                                            <input type="radio" name="vendaPaymentMethod" value="dinheiro" checked>
+                                            <span class="radio-custom"><i class="fa-solid fa-money-bill-1-wave"></i> Dinheiro (Pago)</span>
+                                        </label>
+                                        <label class="radio-label">
+                                            <input type="radio" name="vendaPaymentMethod" value="pix">
+                                            <span class="radio-custom"><i class="fa-solid fa-qrcode"></i> Pix (Pendente)</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <hr class="divider">
+
+                                <div class="form-group">
+                                    <label><strong>Digite os Milhares (4 dígitos cada)</strong></label>
+                                    <p class="subtitle" style="margin: 4px 0 12px 0;">Digite exatamente 4 milhares para formar 1 cartela.</p>
+                                    <div id="milharesInputsContainer" class="milhares-grid">
+                                    </div>
+                                    <div class="milhar-summary" id="milharSummary">
+                                        <span>0 milhares = 0 cartelas</span>
+                                    </div>
+                                    <button type="button" class="btn btn-secondary mt-2" id="randomMilharesBtn">
+                                        <i class="fa-solid fa-dice"></i> Gerar Aleatório
+                                    </button>
+                                </div>
+
+                                <div id="vendaPixArea" style="display: none;">
+                                    <div class="alert alert-warning">
+                                        <i class="fa-solid fa-info-circle"></i> O Pix ficará marcado como "Pendente" até que o administrador confirme o recebimento.
+                                    </div>
+                                    <div class="pix-qr-container">
+                                        <img id="vendaModalPixQr" src="/uploads/pix_qrcode.png" alt="QR Code Pix" class="pix-qr-img">
+                                        <div class="pix-key-box">
+                                            <span class="pix-key-label">Chave Pix:</span>
+                                            <strong id="vendaModalPixKey">financeiro@asorteesua.com</strong>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-block mt-4">
+                                    <i class="fa-solid fa-check-circle"></i> Realizar Venda
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="seller-sales-card card mt-4">
+                            <h2 class="card-title"><i class="fa-solid fa-cart-shopping"></i> Minhas Vendas de Hoje</h2>
+                            <p class="subtitle mb-3">Lista de vendas realizadas por você no dia atual.</p>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Cartela</th>
+                                            <th>Cliente</th>
+                                            <th>Forma Pagto.</th>
+                                            <th>Status</th>
+                                            <th>Valor</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="sellerSalesList">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Vendas do Dia do Vendedor -->
-                <div class="seller-sales-card card mt-4">
-                    <h2 class="card-title"><i class="fa-solid fa-cart-shopping"></i> Minhas Vendas de Hoje</h2>
-                    <p class="subtitle mb-3">Lista de vendas realizadas por você no dia atual.</p>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Cartela</th>
-                                    <th>Cliente</th>
-                                    <th>Forma Pagto.</th>
-                                    <th>Status</th>
-                                    <th>Valor</th>
-                                </tr>
-                            </thead>
-                            <tbody id="sellerSalesList">
-                                <!-- Carregado via JS -->
-                            </tbody>
-                        </table>
+                <!-- Aba Dashboard -->
+                <div id="sellerDashboardTab" class="seller-tab-pane">
+                    <h2 class="section-title"><i class="fa-solid fa-chart-simple"></i> Meu Dashboard</h2>
+
+                    <div class="seller-dash-grid">
+                        <div class="dash-card">
+                            <div class="dash-card-icon red-bg"><i class="fa-solid fa-sack-dollar"></i></div>
+                            <div class="dash-card-info">
+                                <h3>Valor Vendido Hoje</h3>
+                                <p id="sDashValorVendidoHoje">R$ 0,00</p>
+                            </div>
+                        </div>
+
+                        <div class="dash-card">
+                            <div class="dash-card-icon green-bg"><i class="fa-solid fa-circle-check"></i></div>
+                            <div class="dash-card-info">
+                                <h3>Valor Recebido Hoje</h3>
+                                <p id="sDashValorRecebidoHoje">R$ 0,00</p>
+                                <small id="sDashHojeQtd" class="text-muted">0 cartela(s)</small>
+                            </div>
+                        </div>
+
+                        <div class="dash-card">
+                            <div class="dash-card-icon orange-bg"><i class="fa-solid fa-hourglass-half"></i></div>
+                            <div class="dash-card-info">
+                                <h3>Valor Pendente</h3>
+                                <p id="sDashValorPendente">R$ 0,00</p>
+                            </div>
+                        </div>
+
+                        <div class="dash-card">
+                            <div class="dash-card-icon blue-bg"><i class="fa-solid fa-ticket"></i></div>
+                            <div class="dash-card-info">
+                                <h3>Cartelas Vendidas Hoje</h3>
+                                <p id="sDashCartelasVendidas">0</p>
+                            </div>
+                        </div>
+
+                        <div class="dash-card">
+                            <div class="dash-card-icon primary-bg"><i class="fa-solid fa-chart-line"></i></div>
+                            <div class="dash-card-info">
+                                <h3>Ticket Médio</h3>
+                                <p id="sDashTicketMedio">R$ 0,00</p>
+                            </div>
+                        </div>
+
+                        <div class="dash-card">
+                            <div class="dash-card-icon gold-bg"><i class="fa-solid fa-sack-dollar"></i></div>
+                            <div class="dash-card-info">
+                                <h3>Comissão Hoje</h3>
+                                <p id="sDashComissaoHoje">R$ 0,00</p>
+                            </div>
+                        </div>
+
+                        <div class="dash-card">
+                            <div class="dash-card-icon gold-glow-bg"><i class="fa-solid fa-calendar-month"></i></div>
+                            <div class="dash-card-info">
+                                <h3>Comissão no Mês</h3>
+                                <p id="sDashComissaoMes">R$ 0,00</p>
+                            </div>
+                        </div>
+
+                        <div class="dash-card dash-card-full">
+                            <div class="dash-card-icon red-bg"><i class="fa-solid fa-trophy"></i></div>
+                            <div class="dash-card-info">
+                                <h3>Total de Cartelas Vendidas</h3>
+                                <p id="sDashTotalVendidas">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Aba Vendas -->
+                <div id="sellerVendasTab" class="seller-tab-pane">
+                    <h2 class="section-title"><i class="fa-solid fa-cart-shopping"></i> Minhas Vendas</h2>
+
+                    <div class="card">
+                        <div class="list-header">
+                            <div class="filters-row">
+                                <input type="text" id="sellerVendasSearch" placeholder="Buscar cartela ou cliente..." class="form-control" style="min-width:200px;">
+                                <input type="date" id="sellerVendasDataInicio" class="form-control" placeholder="Data início">
+                                <input type="date" id="sellerVendasDataFim" class="form-control" placeholder="Data fim">
+                                <button class="btn btn-outline" id="sellerVendasFilterBtn"><i class="fa-solid fa-filter"></i> Filtrar</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive mt-3">
+                            <table class="table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Cartela</th>
+                                        <th>Milhares</th>
+                                        <th>Cliente</th>
+                                        <th>Valor</th>
+                                        <th>Pagamento</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="sellerVendasList">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- 4. MODAL DE VENDA -->
-    <div class="modal-backdrop" id="saleModal" style="display: none;">
-        <div class="modal">
+    <!-- Modal Cupom -->
+    <div class="modal-backdrop" id="cupomModal" style="display: none;">
+        <div class="modal modal-cupom">
             <div class="modal-header">
-                <h3>Registrar Venda - Cartela #<span id="modalTicketNumber">000</span></h3>
-                <button class="modal-close" id="closeModalBtn">&times;</button>
+                <h3><i class="fa-solid fa-receipt"></i> Cupom de Venda</h3>
+                <button class="modal-close" id="closeCupomBtn">&times;</button>
             </div>
-            <div class="modal-body">
-                <form id="sellTicketForm" class="form">
-                    <input type="hidden" id="modalTicketId">
-                    <div class="form-group">
-                        <label for="clientName">Nome do Cliente</label>
-                        <input type="text" id="clientName" required placeholder="Nome completo do comprador">
+            <div class="modal-body" id="cupomContent">
+                <div class="cupom" id="cupomPrintable">
+                    <div class="cupom-header">
+                        <div class="cupom-logo">
+                            <i class="fa-solid fa-clover gold-glow"></i>
+                            <span class="cupom-title">A Sorte <span class="accent">é Sua</span></span>
+                        </div>
+                        <span class="cupom-subtitle">CUPOM DE VENDA</span>
                     </div>
-                    <div class="form-group">
-                        <label for="clientPhone">Telefone / WhatsApp</label>
-                        <input type="text" id="clientPhone" required placeholder="Ex: (11) 99999-9999">
-                    </div>
-                    <div class="form-group">
-                        <label>Forma de Pagamento</label>
-                        <div class="radio-group">
-                            <label class="radio-label">
-                                <input type="radio" name="paymentMethod" value="dinheiro" checked>
-                                <span class="radio-custom"><i class="fa-solid fa-money-bill-1-wave"></i> Dinheiro (Pago)</span>
-                            </label>
-                            <label class="radio-label">
-                                <input type="radio" name="paymentMethod" value="pix">
-                                <span class="radio-custom"><i class="fa-solid fa-qrcode"></i> Pix (Pendente)</span>
-                            </label>
+                    <div class="cupom-info">
+                        <div class="cupom-row">
+                            <span class="cupom-label">Data:</span>
+                            <span id="cupomData">-</span>
+                        </div>
+                        <div class="cupom-row">
+                            <span class="cupom-label">Vendedor:</span>
+                            <span id="cupomVendedor">-</span>
+                        </div>
+                        <div class="cupom-row">
+                            <span class="cupom-label">Cliente:</span>
+                            <span id="cupomCliente">-</span>
+                        </div>
+                        <div class="cupom-row">
+                            <span class="cupom-label">Telefone:</span>
+                            <span id="cupomTelefone">-</span>
                         </div>
                     </div>
-
-                    <!-- Area de pagamento Pix (oculta inicialmente) -->
-                    <div class="pix-payment-area" id="pixPaymentArea" style="display: none;">
-                        <div class="alert alert-warning">
-                            <i class="fa-solid fa-info-circle"></i> O Pix ficará marcado como "Pendente" até que o administrador confirme o recebimento.
+                    <hr class="divider">
+                    <div class="cupom-cartelas" id="cupomCartelas">
+                    </div>
+                    <hr class="divider">
+                    <div class="cupom-footer">
+                        <div class="cupom-row cupom-total">
+                            <span class="cupom-label">Total:</span>
+                            <strong id="cupomTotal">R$ 0,00</strong>
                         </div>
-                        <div class="pix-qr-container">
-                            <img id="modalPixQr" src="/uploads/pix_qrcode.png" alt="QR Code Pix" class="pix-qr-img">
-                            <div class="pix-key-box">
-                                <span class="pix-key-label">Chave Pix:</span>
-                                <strong id="modalPixKey">financeiro@asorteesua.com</strong>
-                            </div>
+                        <div class="cupom-row">
+                            <span class="cupom-label">Pagamento:</span>
+                            <span id="cupomPagamento">-</span>
+                        </div>
+                        <div class="cupom-row">
+                            <span class="cupom-label">Status:</span>
+                            <span id="cupomStatus">-</span>
+                        </div>
+                        <div class="cupom-row" style="border-top:1px dashed #999;padding-top:4px;margin-top:4px;font-weight:700;color:#16a34a;">
+                            <span class="cupom-label">Prêmio:</span>
+                            <strong id="cupomPremio">R$ 0,00</strong>
                         </div>
                     </div>
-
-                    <div class="modal-actions mt-4">
-                        <button type="button" class="btn btn-outline" id="cancelSaleBtn">Cancelar</button>
-                        <button type="submit" class="btn btn-primary" id="confirmSaleBtn">Confirmar Venda</button>
-                    </div>
-                </form>
+                </div>
+            </div>
+            <div class="modal-actions modal-actions-cupom">
+                <button type="button" class="btn btn-outline" id="closeCupomBtn2">Fechar</button>
+                <button type="button" class="btn btn-primary" id="printCupomBtn">
+                    <i class="fa-solid fa-print"></i> Imprimir
+                </button>
+                <button type="button" class="btn btn-success" id="saveJpgBtn">
+                    <i class="fa-solid fa-image"></i> Salvar JPG
+                </button>
             </div>
         </div>
     </div>
@@ -548,6 +880,8 @@
         <p>&copy; 2026 A Sorte é Sua. Todos os direitos reservados.</p>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
