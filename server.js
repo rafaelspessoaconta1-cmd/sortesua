@@ -1621,13 +1621,17 @@ app.delete('/api/admin/milhares-bloqueados/:id', authenticate, requireAdmin, asy
   }
 });
 
-initDb()
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Servidor rodando na porta ${PORT}`);
-      console.log(`Acesse em http://localhost:${PORT}`);
+if (process.env.VERCEL !== '1') {
+  initDb()
+    .then(() => {
+      app.listen(PORT, () => {
+        console.log(`Servidor rodando na porta ${PORT}`);
+        console.log(`Acesse em http://localhost:${PORT}`);
+      });
+    })
+    .catch(err => {
+      console.error("Erro ao inicializar o banco de dados:", err);
     });
-  })
-  .catch(err => {
-    console.error("Erro ao inicializar o banco de dados:", err);
-  });
+}
+
+module.exports = app;

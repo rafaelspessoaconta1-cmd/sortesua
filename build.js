@@ -5,15 +5,34 @@ const { execSync } = require('child_process')
 const ROOT = __dirname
 const DIST = path.join(ROOT, 'dist')
 
-const ITEMS = [
-  'server.js',
-  'database.js',
-  'package.json',
-  'package-lock.json',
-  'Procfile',
-  '.nvmrc',
-  '.env.example'
-]
+function copyRecursive(src, dest) {
+  const stats = fs.statSync(src)
+  if (stats.isDirectory()) {
+    if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true })
+    for (const entry of fs.readdirSync(src)) {
+      copyRecursive(path.join(src, entry), path.join(dest, entry))
+    }
+  } else {
+    fs.copyFileSync(src, dest)
+  }
+}
+
+function copyToDist(name) {
+  const src = path.join(ROOT, name)
+  const dest = path.join(DIST, name)
+  if (!fs.existsSync(src)) {
+    console.log(`  - ${name} (ignorado)`)
+    return
+  }
+  if (fs.statSync(src).isDirectory()) {
+    copyRecursive(src, dest)
+  } else {
+    const parent = path.dirname(dest)
+    if (!fs.existsSync(parent)) fs.mkdirSync(parent, { recursive: true })
+    fs.copyFileSync(src, dest)
+  }
+  console.log(`  ✓ ${name}`)
+}
 
 let ok = true
 
@@ -26,7 +45,7 @@ console.log('')
 console.log('▶ Verificando sintaxe...')
 ;['server.js', 'database.js', 'public/app.js'].forEach(f => {
   try {
-    execSync(`node -c "${path.join(ROOT, f)}"`, { stdio: 'pipe' })
+    execSync(`node -c "${path.join(ROOT, f)}"`, { stdio: 'pipe', shell: true })
     console.log(`  ✓ ${f}`)
   } catch {
     console.error(`  ✗ ${f} - ERRO de sintaxe`)
@@ -43,38 +62,14 @@ console.log('  ✓ dist/ criada')
 console.log('')
 
 console.log('▶ Copiando arquivos...')
-ITEMS.forEach(item => {
-  const src = path.join(ROOT, item)
-  if (!fs.existsSync(src)) {
-    console.log(`  - ${item} (ignorado)`)
-    return
-  }
-  const dest = path.join(DIST, item)
-  fs.mkdirSync(path.dirname(dest), { recursive: true })
-  fs.cpSync(src, dest, { recursive: true })
-  console.log(`  ✓ ${item}`)
-})
+;['server.js', 'database.js', 'package.json', 'package-lock.json',
+  'Procfile', '.nvmrc', '.env.example', 'public'].forEach(copyToDist)
 
-if (fs.existsSync(path.join(ROOT, 'config.json'))) {
-  fs.cpSync(path.join(ROOT, 'config.json'), path.join(DIST, 'config.json'))
-  console.log('  ✓ config.json')
-}
-
-console.log('  ✓ public/')
-execSync(`Copy-Item -Path "${path.join(ROOT, 'public')}" -Destination "${path.join(DIST, 'public')}" -Recurse -Force`, { shell: 'powershell.exe' })
+if (fs.existsSync(path.join(ROOT, 'config.json'))) copyToDist('config.json')
 
 const uploads = path.join(DIST, 'public', 'uploads')
 if (!fs.existsSync(uploads)) fs.mkdirSync(uploads, { recursive: true })
 console.log('  ✓ public/uploads/')
-console.log('')
-
-console.log('▶ Instalando dependências de produção...')
-try {
-  execSync('npm install --production --no-audit --no-fund', { cwd: DIST, stdio: 'pipe' })
-  console.log('  ✓ node_modules instalado')
-} catch (e) {
-  execSync('npm install --production', { cwd: DIST, stdio: 'inherit' })
-}
 console.log('')
 
 console.log('═══════════════════════════')
@@ -82,7 +77,4 @@ console.log('  BUILD CONCLUÍDO COM SUCESSO')
 console.log('═══════════════════════════')
 console.log('')
 console.log(`  📁 ${DIST}`)
-console.log('')
-console.log('  Para testar localmente:')
-console.log('    cd dist && npm start')
 console.log('')
