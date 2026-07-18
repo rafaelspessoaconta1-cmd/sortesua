@@ -63,7 +63,7 @@ console.log('')
 
 console.log('▶ Copiando arquivos...')
 ;['server.js', 'database.js', 'package.json', 'package-lock.json',
-  'Procfile', '.nvmrc', '.env.example', 'public'].forEach(copyToDist)
+  'Procfile', '.nvmrc', '.env.example', 'schema.sql', 'public'].forEach(copyToDist)
 
 if (fs.existsSync(path.join(ROOT, 'config.json'))) copyToDist('config.json')
 

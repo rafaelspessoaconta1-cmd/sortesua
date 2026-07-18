@@ -64,4 +64,12 @@ CREATE TABLE IF NOT EXISTS milhares_bloqueados (
   UNIQUE(milhar, data_sorteio)
 );
 
+CREATE TABLE IF NOT EXISTS configuracoes (
+  id SERIAL PRIMARY KEY,
+  chave TEXT UNIQUE NOT NULL,
+  valor TEXT NOT NULL
+);
+
+INSERT INTO configuracoes (chave, valor) VALUES ('app_config', '{"valor_premio": 500}') ON CONFLICT (chave) DO NOTHING;
+
 

@@ -40,7 +40,67 @@ function generateSecurePassword() {
   return pwd
 }
 
+let schemaInicializado = false
+
+async function runSchema() {
+  if (schemaInicializado) return
+
+  try {
+    const { error } = await supabase.from('usuarios').select('id').limit(1)
+    if (!error) {
+      schemaInicializado = true
+      return
+    }
+  } catch {}
+
+  console.warn('')
+  console.warn('═══════════════════════════════════════════════════════')
+  console.warn('  ATENÇÃO: Tabelas do banco não encontradas!')
+  console.warn('')
+  console.warn('  Execute o conteúdo de schema.sql no SQL Editor do')
+  console.warn('  Supabase (Dashboard > SQL Editor) para criar as')
+  console.warn('  tabelas antes de usar o sistema.')
+  console.warn('  Ou reinicie o servidor após criar as tabelas.')
+  console.warn('═══════════════════════════════════════════════════════')
+  console.warn('')
+}
+
+async function getConfig(chave, defaultValue = null) {
+  try {
+    const { data } = await supabase
+      .from('configuracoes')
+      .select('valor')
+      .eq('chave', chave)
+      .maybeSingle()
+    if (data) {
+      try { return JSON.parse(data.valor) } catch { return data.valor }
+    }
+  } catch {}
+  return defaultValue
+}
+
+async function setConfig(chave, valor) {
+  const stringVal = typeof valor === 'object' ? JSON.stringify(valor) : String(valor)
+  const { error } = await supabase
+    .from('configuracoes')
+    .upsert({ chave, valor: stringVal }, { onConflict: 'chave' })
+  if (error) throw error
+}
+
+async function getValorPremio() {
+  const cfg = await getConfig('app_config', { valor_premio: 500 })
+  return cfg?.valor_premio ?? 500
+}
+
+async function setValorPremio(valor) {
+  const cfg = await getConfig('app_config', { valor_premio: 500 })
+  cfg.valor_premio = parseFloat(valor)
+  await setConfig('app_config', cfg)
+}
+
 async function initDb() {
+  await runSchema()
+
   const { data: adminExists } = await supabase.from('usuarios').select('id').eq('username', 'admin').maybeSingle()
   if (!adminExists) {
     const adminPass = hashPassword('Rafael@4180')
@@ -103,5 +163,9 @@ module.exports = {
   supabase,
   initDb,
   hashPassword,
-  generateSecurePassword
+  generateSecurePassword,
+  getConfig,
+  setConfig,
+  getValorPremio,
+  setValorPremio
 }

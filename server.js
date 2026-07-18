@@ -6,21 +6,9 @@ const fs = require('fs');
 const multer = require('multer');
 const crypto = require('crypto');
 
-const { supabase, initDb, hashPassword } = require('./database');
+const { supabase, initDb, hashPassword, getValorPremio, setValorPremio, getConfig, setConfig } = require('./database');
 
 const BASE_DIR = process.env.VERCEL ? process.cwd() : __dirname
-const CONFIG_PATH = path.join(BASE_DIR, 'config.json')
-function readConfig() {
-  try {
-    const raw = fs.readFileSync(CONFIG_PATH, 'utf8')
-    return JSON.parse(raw)
-  } catch {
-    return { valor_premio: 500 }
-  }
-}
-function writeConfig(data) {
-  fs.writeFileSync(CONFIG_PATH, JSON.stringify(data, null, 2))
-}
 
 const loginAttempts = new Map()
 const MAX_ATTEMPTS = 3
@@ -45,10 +33,6 @@ function getRemainingAttempts(username) {
   if (!entry) return MAX_ATTEMPTS
   if (entry.count >= MAX_ATTEMPTS) return 0
   return MAX_ATTEMPTS - entry.count
-}
-
-async function getValorPremio() {
-  return readConfig().valor_premio
 }
 
 async function checkBreachedPassword(password) {
@@ -133,7 +117,7 @@ function requireVendedor(req, res, next) {
 app.use(cors());
 app.use(express.json());
 
-const uploadsDir = path.join(__dirname, 'public', 'uploads');
+const uploadsDir = path.join(BASE_DIR, 'public', 'uploads');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
@@ -148,15 +132,22 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(BASE_DIR, 'public')));
 
 let pixConfig = {
   chave: 'financeiro@asorteesua.com',
   qrCodeUrl: '/uploads/pix_qrcode.png'
 };
 
+(async () => {
+  try {
+    const saved = await getConfig('pix_config')
+    if (saved) pixConfig = { chave: saved.chave || pixConfig.chave, qrCodeUrl: saved.qrCodeUrl || pixConfig.qrCodeUrl }
+  } catch {}
+})();
+
 const qrcodeFile = path.join(uploadsDir, 'pix_qrcode.png');
-if (!fs.existsSync(qrcodeFile)) {
+if (process.env.VERCEL !== '1' && !fs.existsSync(qrcodeFile)) {
   const dummyPng = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=', 'base64');
   fs.writeFileSync(qrcodeFile, dummyPng);
 }
@@ -455,9 +446,7 @@ app.put('/api/admin/valor-premio', authenticate, requireAdmin, async (req, res) 
     return res.status(400).json({ error: 'Informe um valor válido maior que zero' });
   }
   try {
-    const cfg = readConfig()
-    cfg.valor_premio = parseFloat(valor_premio)
-    writeConfig(cfg)
+    await setValorPremio(valor_premio)
     res.json({ message: 'Prêmio atualizado com sucesso!' });
   } catch (err) {
     console.error(err);
@@ -790,11 +779,16 @@ app.get('/api/admin/pix-settings', authenticate, async (req, res) => {
   res.json(pixConfig);
 });
 
-app.post('/api/admin/pix-settings', authenticate, requireAdmin, upload.single('qrcode'), (req, res) => {
+app.post('/api/admin/pix-settings', authenticate, requireAdmin, upload.single('qrcode'), async (req, res) => {
   const { chave } = req.body;
   if (chave) pixConfig.chave = chave;
   if (req.file) {
     pixConfig.qrCodeUrl = `/uploads/pix_qrcode.png?t=${Date.now()}`;
+  }
+  try {
+    await setConfig('pix_config', pixConfig)
+  } catch (err) {
+    console.error('Erro ao salvar config Pix no Supabase:', err)
   }
   res.json({ message: 'Dados do Pix atualizados com sucesso', config: pixConfig });
 });
